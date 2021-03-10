@@ -6,7 +6,7 @@ $array = [1,2,5,5,2,3];
 //One example
 $sumEvenNumbers = 0;
 for ($i = 1; $i <= count($array); $i++) {
-    if ($i % 2 === 0) {
+    if ($i % 2 === 0 && is_numeric($array[$i-1])) {
         $sumEvenNumbers += $array[$i-1];
     }
 }
@@ -15,7 +15,7 @@ var_export($sumEvenNumbers);
 //Two example
 $sumEvenNumbers2 = 0;
 foreach ($array as $key => $value){
-    if ($key === 0 && $key % 2 === 0) {
+    if ($key === 0 && $key % 2 === 0 &&  is_numeric($value)) {
         $sumEvenNumbers2 += $value;
     }
 }
