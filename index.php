@@ -1,42 +1,26 @@
 <?php
 
 //1. Получить сумму всех вторых элементов массива произвольного размера и вложенности.
-$array = [1,2,5,5,2,3];
-
-//One example
-$sumEvenNumbers = 0;
-for ($i = 1; $i <= count($array); $i++) {
-    if ($i % 2 === 0 && is_numeric($array[$i-1])) {
-        $sumEvenNumbers += $array[$i-1];
-    }
-}
-var_export($sumEvenNumbers);
-
-//Two example
-$sumEvenNumbers2 = 0;
-foreach ($array as $key => $value){
-    if ($key === 0 && $key % 2 === 0 &&  is_numeric($value)) {
-        $sumEvenNumbers2 += $value;
-    }
-}
-var_export($sumEvenNumbers);
-
-/*2.*/ $str = "Определить количество символов входящих в произвольную строку, т.е у строки 'afrae' a = 2, e=1, f=1,r=1";
-
-//$str = 'Some text for example';
-$result = [];
-if(preg_match('/[а-я]+/msi', $str)){
-    echo 'Cyrillic not supported';
-} else{
-    for ($i = 0; $i <= strlen($str); $i++) {
-        $key = $str[$i];
-        if(!empty($key)){
-            if(array_key_exists($key, $result)){
-                ++$result[$key];
-            } else {
-                $result[$key] = 1;
-            }
+$arr = [1,2,5,4,[6,5,2,3],5,2,3,[6,5,2,3]];
+$sum = 0;
+array_walk_recursive(
+    $arr,
+    static function ($value, $key) use (&$sum) {
+        if (is_numeric($value) && !($key % 2 === 0)) {
+            $sum += $value;
         }
     }
-    var_dump($result);
+);
+var_export($sum);
+
+/*2.*/ $str = "Определить количество символов входящих в произвольную строку, т.е у строки 'afrae' a = 2, e=1, f=1,r=1";
+$arr = mb_str_split($str, 1, 'UTF-8');
+$result = [];
+foreach ($arr as $value){
+    if(array_key_exists($value, $result)){
+        ++$result[$value];
+    } else {
+        $result[$value] = 1;
+    }
 }
+var_export($result);
