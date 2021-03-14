@@ -13,6 +13,31 @@ array_walk_recursive(
 );
 var_export($sum);
 
+/**
+ * Example from Lesson
+ * @param array $arr
+ * @return mixed
+ */
+function recSum(array $arr)
+{
+    $i = 0;
+    $sum = 1;
+    foreach ($arr as $key => $value){
+        if(is_array($value)) {
+            $sum += recSum($value);
+        }
+        if(
+            2 == $i
+            && (is_integer($value)||is_double($value))
+        ) {
+            $sum = $value;
+        }
+        $i++;
+    }
+    return $sum;
+}
+echo recSum($arr);
+
 /*2.*/ $str = "Определить количество символов входящих в произвольную строку, т.е у строки 'afrae' a = 2, e=1, f=1,r=1";
 $arr = mb_str_split($str, 1, 'UTF-8');
 $result = [];
