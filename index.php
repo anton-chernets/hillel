@@ -1,5 +1,5 @@
 <?php
-
+/* Домашнее задание 3 */
 //1. Получить сумму всех вторых элементов массива произвольного размера и вложенности.
 $arr = [1,2,5,4,[6,5,2,3],5,2,3,[6,5,2,3]];
 $sum = 0;
@@ -49,3 +49,44 @@ foreach ($arr as $value){
     }
 }
 var_export($result);
+
+
+/* Классное занятие 4 */
+function boo(...$test)
+{
+    //
+}
+boo('string', 1, 5, [1,2,3]);
+function boo2()
+{
+    function boo3()
+    {
+        //
+    }
+}
+boo2();
+boo3();
+
+
+//    $closure ('hello');// не в области видимости клажура
+$testString = ' World!';
+$closure = function ($test) use($testString)
+{
+    echo $test . $testString;
+
+};
+$closure ('hello');
+$testString (' World!2');// не в области видимости клажура
+$closure ('hello');
+
+
+function testStatic(int $a = 1)
+{
+    static $var;// хранит значение после вызова функции (обычно перетирается после вызова функции)
+    $var = $var + $a;
+    echo $var;
+}
+testStatic();
+testStatic();
+testStatic();
+testStatic();
