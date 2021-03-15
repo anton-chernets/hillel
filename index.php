@@ -93,7 +93,7 @@ testStatic();
 
 // 1. создать функцию - фабрику вызова функций пользователя через безымянную функцию
 $str = 'test arg';
-$fabric = static function ($func) use ($str)
+$fabric = function ($func) use ($str)
 {
     echo $func($str);
 };
