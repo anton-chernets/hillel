@@ -90,3 +90,58 @@ testStatic();
 testStatic();
 testStatic();
 testStatic();
+
+// 1. создать функцию - фабрику вызова функций пользователя через безымянную функцию
+$str = 'test arg';
+$fabric = function ($func) use ($str)
+{
+    echo $func($str);
+};
+
+function method1()
+{
+    echo "method1 без аргумента <br />\n";
+}
+
+function method2($arg)
+{
+    echo 'method2 аргумент - '. $arg ."<br />\n";
+}
+
+function method3($arg)
+{
+    echo 'method3 аргумент - '. $arg ."<br />\n";
+}
+
+$fabric('method1');
+$fabric('method2');
+$fabric('method3');
+
+// 2. создать функцию обеспечивающую запись в csv файл
+function writeToCSV(array $arr)
+{
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="sample.csv"');
+
+    $fp = fopen('php://output', 'wb');
+    foreach ($arr as $line) {
+        $val = explode(",", $line);
+        fputcsv($fp, $val);
+    }
+    fclose($fp);
+}
+$arr = array(
+    'test , string, for, homework',
+    'another row',
+);
+writeToCSV($arr);
+
+// 3. создать функцию обеспечивающую чтение из csv файла
+function readFromCSV($filename)
+{
+    $handle = fopen($filename, "r");
+    while (($data = fgetcsv($handle)) !== FALSE) {
+        var_dump($data);
+    }
+}
+readFromCSV('sample.csv');
