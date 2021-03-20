@@ -145,3 +145,81 @@ function readFromCSV($filename)
     }
 }
 readFromCSV('sample.csv');
+
+//\array_search();//ускоренная обработка
+
+abstract class A
+{
+    public static $var = 'yeah';
+
+    abstract function test(int $i): int;
+}
+
+class B extends A
+{
+    function test(int $i): int
+    {
+        return 1;
+    }
+
+    function func(string $var)
+    {
+        return $var . $var;
+    }
+}
+
+class C extends A
+{
+    function test(int $i): int
+    {
+        return 2;
+    }
+
+    private function str0($test): string
+    {
+        return $test . $test;
+    }
+
+    final function str($test): string
+    {
+        return $test . $test;
+    }
+}
+
+final class E extends C
+{
+    function func(string $var): int
+    {
+        return $var . $var;
+    }
+
+    public function str0($test): string
+    {
+        return $test . $test . $test;
+    }
+}
+
+class D
+{
+    function test(A $obj): int
+    {
+        return $obj->test(5);
+    }
+
+    function print(): void
+    {
+        A::$var = 1111;
+        var_dump(A::$var);
+    }
+}
+
+$objB = new B;
+$objC = new C;
+$objD = new D;
+$objE = new E;
+
+//    var_dump($objD->test($objB));
+//    var_dump($objD->test($objC));
+//    var_dump($objE->str0('test'));
+
+$objD->print();
