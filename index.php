@@ -232,7 +232,7 @@ abstract class Animals
 //5.2 Создать наследников от животных - хищники, травоядные
 class Predators extends Animals
 {
-    protected const EAT_COEFFICIENT = 1.5;
+    const EAT_COEFFICIENT = 1.5;
 
     function amountFood(int $weight): float
     {
@@ -242,7 +242,7 @@ class Predators extends Animals
 
 class Herbivores extends Animals
 {
-    protected const EAT_COEFFICIENT = 2;
+    const EAT_COEFFICIENT = 2;
 
     function amountFood(int $weight): float
     {
@@ -333,7 +333,7 @@ var_dump($objBoats->convertCostToDollars($cost));
 //5.6 Создать хелпер работающий с массивами
 class ArrayHelper
 {
-    static function sumSecondNumbers($arr)
+    public static function sumSecondNumbers(array $arr)
     {
         $sum = 0;
         array_walk_recursive(
@@ -353,7 +353,7 @@ var_export(ArrayHelper::sumSecondNumbers([1,2,5,4,[6,5,2,3],5,2,3,[6,5,2,3]]));
 //5.7 Создать хелпер работающий со строками
 class StringHelper
 {
-    static function getFileNameWithoutFormat($str)
+    public static function getFileNameWithoutFormat(string $str)
     {
         $arr = mb_str_split($str, 1, 'UTF-8');
         $result = [];
