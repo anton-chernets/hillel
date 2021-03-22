@@ -223,3 +223,121 @@ $objE = new E;
 //    var_dump($objE->str0('test'));
 
 $objD->print();
+
+interface Animal
+{
+    public function getType():string;
+
+    public function getColor():string;
+
+    public function getEat(): string;
+}
+
+interface Area
+{
+    public function getArea():string;
+}
+
+class Pig implements Animal
+{
+
+    public function getType(): string
+    {
+        // TODO: Implement getType() method.
+    }
+
+    public function getColor(): string
+    {
+        // TODO: Implement getColor() method.
+    }
+
+    public function getEat(): string
+    {
+        // TODO: Implement getEat() method.
+    }
+
+    public function getArea(): string
+    {
+        // TODO: Implement getArea() method.
+    }
+}
+
+class Alligator implements Animal, Area
+{
+    protected $type = 'predator';
+    protected $color = 'green';
+    protected $eat = 'eat';
+    protected $area = 'area';
+
+    public function getType(): string
+    {
+        // TODO: Implement getType() method.
+    }
+
+    public function getColor(): string
+    {
+        // TODO: Implement getColor() method.
+    }
+
+    public function getEat(): string
+    {
+        // TODO: Implement getEat() method.
+    }
+
+    public function getArea(): string
+    {
+        // TODO: Implement getArea() method.
+    }
+}
+
+class Peggy extends Pig implements Area
+{
+    protected $area = 'earth';
+
+    public function getArea(): string
+    {
+        return $this->area;
+    }
+}
+
+trait Test
+{
+    public function sum(int $a, int $b): int
+    {
+        return $a + $b;
+    }
+
+    public function percent(int $a, int $b): int
+    {
+        return ($a / $b) * 100;
+    }
+}
+
+class Math
+{
+    use Test;
+
+    public function __get($name)
+    {
+        echo $this->data[$name] * 10;
+    }
+
+    public function __call($name, $arguments)
+    {
+        // Note: value of $name is case sensitive.
+        echo "Calling object method '$name' "
+            . implode(', ', $arguments). "\n";
+    }
+}
+
+class Math1
+{
+    use Test;
+}
+
+$objMath = new Math();
+
+$objMath->test = 10;
+var_export($objMath->test);
+$objMath->test('Test');
+$objMath->percent(1, 2);
