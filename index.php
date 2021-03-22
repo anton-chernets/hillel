@@ -223,3 +223,149 @@ $objE = new E;
 //    var_dump($objE->str0('test'));
 
 $objD->print();
+
+//5.1 Создать абстрактный класс "животные"
+abstract class Animals
+{
+    abstract function amountFood(int $weight): ?float;
+}
+//5.2 Создать наследников от животных - хищники, травоядные
+class Predators extends Animals
+{
+    const EAT_COEFFICIENT = 1.5;
+
+    function amountFood(int $weight): float
+    {
+       return self::EAT_COEFFICIENT * $weight;
+    }
+}
+
+class Herbivores extends Animals
+{
+    const EAT_COEFFICIENT = 2;
+
+    function amountFood(int $weight): float
+    {
+        return self::EAT_COEFFICIENT * $weight;
+    }
+}
+
+$objPredators = new Predators();
+var_dump($objPredators->amountFood(100));
+$objPredators = new Herbivores();
+var_dump($objPredators->amountFood(300));
+
+//5.2 Создать абстрактный класс "Транспортные средства"
+abstract class Transport
+{
+    /**
+     * @var int in american cent
+     */
+    protected int $costByMile;
+
+    public function __construct($costByMile)
+    {
+        $this->costByMile = $costByMile;
+    }
+    /**
+     * @param int $weight
+     * @param int $distance
+     * @return int
+     */
+    abstract function transportationCosts(int $weight, int $distance): int;
+    /**
+     * @param int $costInCents
+     * @return numeric
+     */
+    public function convertCostToDollars(int $costInCents): int
+    {
+        return $costInCents/100;
+    }
+}
+//5.4 Создать наследников от транспортных средств - лодки, легковые авто, грузовики
+//5.5 Создать реализации для всех наследников первого уровня
+class Boats extends Transport
+{
+    private $cranePrice;
+
+    function __construct($costByMile, $cranePrice) {
+        parent::__construct($costByMile);
+        $this->cranePrice = $cranePrice;
+    }
+
+    function transportationCosts(int $weight, int $distance): int
+    {
+        return $this->costByMile * $weight * $distance * $this->cranePrice;
+    }
+}
+
+class PassengerCars extends Transport
+{
+    function __construct($costByMile) {
+        parent::__construct($costByMile);
+    }
+
+    function transportationCosts(int $weight, int $distance): int
+    {
+        return $this->costByMile * $weight * $distance;
+    }
+}
+
+class Trucks extends Transport
+{
+    private $containerPrice;
+
+    function __construct($costByMile, $containerPrice) {
+        parent::__construct($costByMile);
+        $this->containerPrice = $containerPrice;
+    }
+
+    function transportationCosts(int $weight, int $distance): int
+    {
+        return $this->costByMile * $weight * $distance * $this->containerPrice;
+    }
+}
+
+$objBoats = new Boats(30, 10000);
+$cost = $objBoats->transportationCosts(2000, 450);
+var_dump($objBoats->convertCostToDollars($cost));
+
+//5.6 Создать хелпер работающий с массивами
+class ArrayHelper
+{
+    public static function sumSecondNumbers(array $arr)
+    {
+        $sum = 0;
+        array_walk_recursive(
+            $arr,
+            static function ($value, $key) use (&$sum) {
+                if (is_numeric($value) && !($key % 2 === 0)) {
+                    $sum += $value;
+                }
+            }
+        );
+        return $sum;
+    }
+}
+
+var_export(ArrayHelper::sumSecondNumbers([1,2,5,4,[6,5,2,3],5,2,3,[6,5,2,3]]));
+
+//5.7 Создать хелпер работающий со строками
+class StringHelper
+{
+    public static function getFileNameWithoutFormat(string $str)
+    {
+        $arr = mb_str_split($str, 1, 'UTF-8');
+        $result = [];
+        foreach ($arr as $value){
+            if(array_key_exists($value, $result)){
+                ++$result[$value];
+            } else {
+                $result[$value] = 1;
+            }
+        }
+        return $result;
+    }
+}
+
+var_export(StringHelper::getFileNameWithoutFormat('суммы входящих символов/sum entry chars'));
