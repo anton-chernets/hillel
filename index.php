@@ -224,120 +224,148 @@ $objE = new E;
 
 $objD->print();
 
-interface Animal
+//5.1 Создать абстрактный класс "животные"
+abstract class Animals
 {
-    public function getType():string;
-
-    public function getColor():string;
-
-    public function getEat(): string;
+    abstract function amountFood(int $weight): ?float;
 }
-
-interface Area
+//5.2 Создать наследников от животных - хищники, травоядные
+class Predators extends Animals
 {
-    public function getArea():string;
-}
+    const EAT_COEFFICIENT = 1.5;
 
-class Pig implements Animal
-{
-
-    public function getType(): string
+    function amountFood(int $weight): float
     {
-        // TODO: Implement getType() method.
-    }
-
-    public function getColor(): string
-    {
-        // TODO: Implement getColor() method.
-    }
-
-    public function getEat(): string
-    {
-        // TODO: Implement getEat() method.
-    }
-
-    public function getArea(): string
-    {
-        // TODO: Implement getArea() method.
+       return self::EAT_COEFFICIENT * $weight;
     }
 }
 
-class Alligator implements Animal, Area
+class Herbivores extends Animals
 {
-    protected $type = 'predator';
-    protected $color = 'green';
-    protected $eat = 'eat';
-    protected $area = 'area';
+    const EAT_COEFFICIENT = 2;
 
-    public function getType(): string
+    function amountFood(int $weight): float
     {
-        // TODO: Implement getType() method.
-    }
-
-    public function getColor(): string
-    {
-        // TODO: Implement getColor() method.
-    }
-
-    public function getEat(): string
-    {
-        // TODO: Implement getEat() method.
-    }
-
-    public function getArea(): string
-    {
-        // TODO: Implement getArea() method.
+        return self::EAT_COEFFICIENT * $weight;
     }
 }
 
-class Peggy extends Pig implements Area
-{
-    protected $area = 'earth';
+$objPredators = new Predators();
+var_dump($objPredators->amountFood(100));
+$objPredators = new Herbivores();
+var_dump($objPredators->amountFood(300));
 
-    public function getArea(): string
+//5.2 Создать абстрактный класс "Транспортные средства"
+abstract class Transport
+{
+    /**
+     * @var int in american cent
+     */
+    protected int $costByMile;
+
+    public function __construct($costByMile)
     {
-        return $this->area;
+        $this->costByMile = $costByMile;
+    }
+    /**
+     * @param int $weight
+     * @param int $distance
+     * @return int
+     */
+    abstract function transportationCosts(int $weight, int $distance): int;
+    /**
+     * @param int $costInCents
+     * @return numeric
+     */
+    public function convertCostToDollars(int $costInCents): int
+    {
+        return $costInCents/100;
+    }
+}
+//5.4 Создать наследников от транспортных средств - лодки, легковые авто, грузовики
+//5.5 Создать реализации для всех наследников первого уровня
+class Boats extends Transport
+{
+    private $cranePrice;
+
+    function __construct($costByMile, $cranePrice) {
+        parent::__construct($costByMile);
+        $this->cranePrice = $cranePrice;
+    }
+
+    function transportationCosts(int $weight, int $distance): int
+    {
+        return $this->costByMile * $weight * $distance * $this->cranePrice;
     }
 }
 
-trait Test
+class PassengerCars extends Transport
 {
-    public function sum(int $a, int $b): int
-    {
-        return $a + $b;
+    function __construct($costByMile) {
+        parent::__construct($costByMile);
     }
 
-    public function percent(int $a, int $b): int
+    function transportationCosts(int $weight, int $distance): int
     {
-        return ($a / $b) * 100;
+        return $this->costByMile * $weight * $distance;
     }
 }
 
-class Math
+class Trucks extends Transport
 {
-    use Test;
+    private $containerPrice;
 
-    public function __get($name)
-    {
-        echo $this->data[$name] * 10;
+    function __construct($costByMile, $containerPrice) {
+        parent::__construct($costByMile);
+        $this->containerPrice = $containerPrice;
     }
 
-    public function __call($name, $arguments)
+    function transportationCosts(int $weight, int $distance): int
     {
-        // Note: value of $name is case sensitive.
-        echo "Calling object method '$name' "
-            . implode(', ', $arguments). "\n";
+        return $this->costByMile * $weight * $distance * $this->containerPrice;
     }
 }
 
-class Math1
+$objBoats = new Boats(30, 10000);
+$cost = $objBoats->transportationCosts(2000, 450);
+var_dump($objBoats->convertCostToDollars($cost));
+
+//5.6 Создать хелпер работающий с массивами
+class ArrayHelper
 {
-    use Test;
+    public static function sumSecondNumbers(array $arr)
+    {
+        $sum = 0;
+        array_walk_recursive(
+            $arr,
+            static function ($value, $key) use (&$sum) {
+                if (is_numeric($value) && !($key % 2 === 0)) {
+                    $sum += $value;
+                }
+            }
+        );
+        return $sum;
+    }
 }
 
-$objMath = new Math();
+var_export(ArrayHelper::sumSecondNumbers([1,2,5,4,[6,5,2,3],5,2,3,[6,5,2,3]]));
 
-$objMath->test = 10;
-var_export($objMath->test);
-$objMath->test('Test');
-$objMath->percent(1, 2);
+//5.7 Создать хелпер работающий со строками
+class StringHelper
+{
+    public static function getFileNameWithoutFormat(string $str)
+    {
+        $arr = mb_str_split($str, 1, 'UTF-8');
+        $result = [];
+        foreach ($arr as $value){
+            if(array_key_exists($value, $result)){
+                ++$result[$value];
+            } else {
+                $result[$value] = 1;
+            }
+        }
+        return $result;
+    }
+}
+
+var_export(StringHelper::getFileNameWithoutFormat('суммы входящих символов/sum entry chars'));
