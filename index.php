@@ -414,7 +414,7 @@ trait Power
 {
     public function calcEnginePower(string $engineType, int $engineCapacity = null)
     {
-        //TODO кажется я не правильно задал типы данных, не пойму как считать со стрингой
+        //TODO тип получается, и в зависимости от типа уже какие то расчеты
     }
 }
 
