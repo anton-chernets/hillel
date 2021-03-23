@@ -369,3 +369,164 @@ class StringHelper
 }
 
 var_export(StringHelper::getFileNameWithoutFormat('суммы входящих символов/sum entry chars'));
+
+class StringHelper
+{
+    public static function camelCaseToSeparateWords(string $str): string
+    {
+        return implode(' ', preg_split('/(?=[A-Z])/',$str));
+    }
+}
+class Transport
+{
+    public function getTypeDescription(string $methodName, string $type): string
+    {
+        return static::class ." have {$type} ". StringHelper::camelCaseToSeparateWords($methodName);
+    }
+}
+interface WheelFormula
+{
+    public function wheelParams(int $wheelCount, int $wheelDriveCount): array;
+}
+interface BodyType
+{
+    const TYPE_PICK_UP = 'pick_up';
+    const TYPE_CLOSE = 'close';
+
+    public function bodyType(string $type): string;
+}
+interface EngineType
+{
+    const TYPE_DIESEL = 'diesel';
+    const TYPE_ELECTRIC = 'electric';
+
+    public function engineType(string $type): string;
+}
+interface TransmissionType
+{
+    const TYPE_AUTOMATIC = 'automatic';
+    const TYPE_MANUAL = 'automatic';
+    const TYPE_LEVER = 'lever';
+
+    public function transmissionType(string $type): string;
+}
+trait Power
+{
+    public function calcEnginePower(string $engineType, int $engineCapacity = null)
+    {
+        //TODO тип получается, и в зависимости от типа уже какие то расчеты
+    }
+}
+
+class Tractor extends Transport implements WheelFormula, BodyType, EngineType, TransmissionType
+{
+    use Power;
+
+    public function wheelParams(int $wheelCount, int $wheelDriveCount): array
+    {
+        return [
+            'wheel_count' => $wheelCount,
+            'wheel_drive' => $wheelDriveCount,
+        ];
+    }
+
+    public function bodyType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+
+    public function engineType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+
+    public function transmissionType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+}
+
+class Panzer extends Transport implements BodyType, EngineType, TransmissionType
+{
+    use Power;
+
+    public function bodyType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+
+    public function engineType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+
+    public function transmissionType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+}
+
+class Bike extends Transport implements WheelFormula, TransmissionType
+{
+    public function wheelParams(int $wheelCount, int $wheelDriveCount): array
+    {
+        return [
+            'wheel_count' => $wheelCount,
+            'wheel_drive' => $wheelDriveCount
+        ];
+    }
+
+    public function transmissionType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+}
+
+class Tesla extends Transport implements WheelFormula, BodyType, EngineType, TransmissionType
+{
+    use Power;
+
+    public function wheelParams(int $wheelCount, int $wheelDriveCount): array
+    {
+        return [
+            'wheel_count' => $wheelCount,
+            'wheel_drive' => $wheelDriveCount,
+        ];
+    }
+
+    public function bodyType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+
+    public function engineType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+
+    public function transmissionType(string $type): string
+    {
+        return $this->getTypeDescription(__FUNCTION__, $type);
+    }
+}
+
+$objTractor = new Tractor();
+var_export($objTractor->transmissionType(TransmissionType::TYPE_MANUAL));
+var_export($objTractor->bodyType(BodyType::TYPE_CLOSE));
+var_export($objTractor->engineType(EngineType::TYPE_DIESEL));
+var_export($objTractor->wheelParams(4, 2));
+
+$objPanzer = new Panzer();
+var_export($objPanzer->transmissionType(TransmissionType::TYPE_LEVER));
+var_export($objPanzer->bodyType(BodyType::TYPE_CLOSE));
+var_export($objPanzer->engineType(EngineType::TYPE_DIESEL));
+
+$objBike = new Bike();
+var_export($objBike->transmissionType(TransmissionType::TYPE_LEVER));
+var_export($objBike->wheelParams(2, 1));
+
+$objTesla = new Tesla();
+var_export($objTesla->transmissionType(TransmissionType::TYPE_AUTOMATIC));
+var_export($objTesla->bodyType(BodyType::TYPE_PICK_UP));
+var_export($objTesla->engineType(EngineType::TYPE_ELECTRIC));
+var_export($objTesla->wheelParams(4, 2));
